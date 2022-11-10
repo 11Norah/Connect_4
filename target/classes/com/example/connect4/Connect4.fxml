@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            style=" -fx-background-image: url('https://img.genial.ly/56f02bbc1561e80fe0933d02/e739988d-16f2-4f93-88bf-6999f7dcd095.png');
+                     -fx-background-size: 800 600;"
+            fx:controller="com.example.connect4.Connect4_Controller"
+            prefHeight="400.0" prefWidth="600.0">
+
+</AnchorPane>
