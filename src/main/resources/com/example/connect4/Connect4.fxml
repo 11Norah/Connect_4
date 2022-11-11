@@ -24,6 +24,7 @@
             <Image
                     url="https://i0.wp.com/baytekentlive.wpengine.com/wp-content/uploads/2017/06/connect4logo.png"/>
         </image></ImageView>
+
         <Button fx:id="restart"  layoutX="1200.0" layoutY="3.0" mnemonicParsing="false"   >
             <graphic>
                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="100.0" fitWidth="100.0" style="-fx-border-radius:50; -fx-background-radius:50;">
@@ -31,6 +32,19 @@
                 </ImageView>
             </graphic>
         </Button>
+
+        <Label text="Player Score :" layoutY="200" layoutX="100"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label fx:id="Player_score" layoutY="200" layoutX="100"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label text="Computer Score :" layoutX="100" layoutY="230"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label fx:id="Computer_score" layoutX="100" layoutY="230"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
     </children>
 
 </AnchorPane>
