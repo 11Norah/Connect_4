@@ -47,6 +47,7 @@ public class State {
         BitsArray bits = new BitsArray(board.getBits());
         bits.changeNthThreeBits(9 * column, colEmptySlot+1);
         bits.changeNthBit(9 * column + 3 + colEmptySlot, turn);
+        bits.changeNthBit(63, !turn);
         return new State(bits);
     }
 
