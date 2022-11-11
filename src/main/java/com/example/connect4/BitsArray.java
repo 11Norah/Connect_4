@@ -40,4 +40,8 @@ public class BitsArray {
             n++;
         }
     }
+
+    public long getBits() {
+        return bits;
+    }
 }
