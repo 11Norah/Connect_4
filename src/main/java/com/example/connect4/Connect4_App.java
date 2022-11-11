@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Connect4_App extends Application {
-    public Stage initial=new Stage();
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Connect4_App.class.getResource("Initial_page.fxml"));
