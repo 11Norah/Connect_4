@@ -6,11 +6,54 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            style=" -fx-background-image: url('https://img.genial.ly/56f02bbc1561e80fe0933d02/e739988d-16f2-4f93-88bf-6999f7dcd095.png');
-                     -fx-background-size: 800 600;"
             fx:controller="com.example.connect4.Connect4_Controller"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="900.0" prefWidth="900.0" >
+    <children>
+        <ImageView  pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="https://static.vecteezy.com/system/resources/thumbnails/002/018/246/original/abstract-colorful-pastel-gradient-background-free-video.jpg" />
+            </image>
+        </ImageView>
+        <Pane fx:id="GamePane" layoutX="550.0" layoutY="100.0" prefHeight="600.0" prefWidth="750.0" />
+        <ImageView layoutX="30.0" layoutY="30.0"  ><image>
+            <Image
+                    url="https://i0.wp.com/baytekentlive.wpengine.com/wp-content/uploads/2017/06/connect4logo.png"/>
+        </image></ImageView>
+
+        <Button fx:id="restart"  layoutX="1250.0" layoutY="3.0" mnemonicParsing="false" onAction="#Restart"  >
+            <graphic>
+                <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="100.0" fitWidth="100.0" style="-fx-border-radius:50; -fx-background-radius:50;">
+                    <Image url="https://st2.depositphotos.com/1853861/7028/v/950/depositphotos_70280439-stock-illustration-reset-button-icon.jpg"/>
+                </ImageView>
+            </graphic>
+        </Button>
+
+        <Label text="Player Score :" layoutY="200" layoutX="100"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label fx:id="Player_score" layoutY="200" layoutX="100"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label text="Computer Score :" layoutX="100" layoutY="230"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label fx:id="Computer_score" layoutX="100" layoutY="230"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+
+        <Label fx:id="status" layoutY="290" layoutX="120"  text="Let's start!" style="-fx-background-color: white; -fx-text-fill:Blue; ">
+            <font>
+                <Font name="Forte" size="30.0"  />
+            </font>
+            <effect>
+
+            </effect>
+        </Label>
+    </children>
 
 </AnchorPane>

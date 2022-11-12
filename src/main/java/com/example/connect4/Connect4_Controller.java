@@ -4,13 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.print.PageLayout;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.Pane;
@@ -33,7 +31,26 @@ public class Connect4_Controller implements Initializable{
     @FXML
     private ComboBox ColorsCombo;
     @FXML
-    private TextField textfield_k;
+    private TextField textfield_K;
+    //for game page
+    private static final int TileSize = 80;
+    private static final int Columns = 7;
+    private static final int Rows = 6;
+
+    //used Variables
+    private Stage main_stage;
+    Boolean CompletedColumn=false;
+    int[] ChipsInColumn=new int[Columns];
+    public Boolean PlayerTurn=true;
+    @FXML
+    private Pane GamePane=new Pane();
+    @FXML
+    private Label status;
+
+    int levels;
+    Boolean PlayerColor;
+    Boolean Algorithm;
+
     @FXML
     protected void display() {
         AlgorithmsCombo.getItems().setAll("Minimax without alpha-beta pruning", "Minimax with alpha-beta pruning");
@@ -43,65 +60,62 @@ public class Connect4_Controller implements Initializable{
     protected void displayCo() {
         ColorsCombo.getItems().setAll("Red", "Yellow");
     }
+    private void alert_error(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Invalid ");
+        alert.setHeaderText("Try again !");
+        alert.setContentText(message);
+        alert.show();
+    }
     //------------------------------------------------------------------------------------------
-    private Stage main_stage;
-    private int levels;
-    private Boolean color;
-    private Boolean Algorithm;
 
-    private static final int TileSize = 80;
-    private static final int Columns = 7;
-    private static final int Rows = 6;
-
-    @FXML
-    private Pane GamePane=new Pane();
-
-
-
-
-    @FXML
-    protected void StartGame(ActionEvent event) throws IOException {
-        main_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        //main_stage=new Stage();
-        main_stage.setScene(new Scene
-                (new FXMLLoader(Connect4_App.class.getResource("Connect4.fxml")).load(),1000,900));
-        main_stage.setMaximized(true);
-        main_stage.setResizable(false);
-        main_stage.show();
-
-        //setting the values taken in initial page
-        if(textfield_k!=null && ColorsCombo!=null && AlgorithmsCombo!=null) {
-            levels = Integer.parseInt(textfield_k.getText());
-
-            if (ColorsCombo.getValue() == "Red") {
-                color = true;
-            } //if color =true ,then player is red
-            else {
-                color = false;
-            }
-            if (AlgorithmsCombo.getValue() == "Minimax with alpha-beta pruning") {
-                Algorithm = true;
-            } //algorithm is true if it is with pruning
-            else {
-                Algorithm = false;
-            }
+    public void Restart(){
+        System.out.println(PlayerColor +"  KK");
+        GamePane.getChildren().clear();
+        GamePane.getChildren().add(Board());
+        //reset columns array to be empty
+        for(int i=0;i<Columns;i++){
+        ChipsInColumn[i]=0;
         }
-        else{ //display error
-            System.out.println("Complete empty fields");}
-
+    }
+    public void AddChip(int Column_no, Boolean red){
+        Circle new_chip=new Circle(TileSize/2);
+        if(red){
+        new_chip.setFill(Color.RED);}
+        else{new_chip.setFill(Color.YELLOW);}
+        new_chip.setCenterX(TileSize/2+3.5);
+        new_chip.setCenterY(TileSize/2+3.5);
+        new_chip.setTranslateX( Column_no*(TileSize+10)+TileSize/3);
+        new_chip.setTranslateY(((5-ChipsInColumn[Column_no]) * (TileSize + 10)) + TileSize / 3);
+        GamePane.getChildren().add(new_chip);
 
     }
+    void PlayerTurn(int column_NO){
+        if(PlayerTurn){
+              System.out.println("color in turns"+this.PlayerColor);
+                AddChip(column_NO, this.PlayerColor);
 
-    private Shape Board() {
-        Shape shape = new Rectangle((Columns + 1) * TileSize, (Rows + 1) * TileSize);
+                ChipsInColumn[column_NO]++;
+
+        }else{alert_error("It's Computer Turn ,wait!");}
+
+    }
+    private void ComputerTurn(){
+        //after it plays
+        //display that it is player's turn
+
+    }
+    Shape Board() {
+        //to display board as shape
+        Shape shape = new Rectangle((Columns + 1.5) * TileSize, (Rows + 1.5) * TileSize);
 
         for (int y = 0; y < Rows; y++) {
             for (int x = 0; x < Columns; x++) {
                 Circle circle = new Circle(TileSize / 2);
                 circle.setCenterX(TileSize / 2 +3);
                 circle.setCenterY(TileSize / 2 +3);
-                circle.setTranslateX(x * (TileSize + 5) + TileSize / 3);
-                circle.setTranslateY(y * (TileSize + 5) + TileSize / 3);
+                circle.setTranslateX(x * (TileSize + 10) + TileSize / 3);
+                circle.setTranslateY(y * (TileSize + 10) + TileSize / 3);
                 shape = Shape.subtract(shape, circle);
             }
         }
@@ -115,11 +129,91 @@ public class Connect4_Controller implements Initializable{
         shape.setFill(Color.BLUE);
         shape.setEffect(lighting);
 
+        //Making invisible rectangles specifying columns and invisible circles in them
+        //to determine mouse click when user plays
+
+        for (int i=0;i<Columns;i++){
+            Rectangle column=new Rectangle(TileSize+10,(Rows + 1.5) * TileSize);
+            column.setTranslateX(i*(TileSize+10)+TileSize/4);
+            column.setFill(Color.TRANSPARENT);
+
+        column.setOnMouseEntered(e -> {
+            column.setFill(Color.rgb(0,0,0,0.2));});
+        column.setOnMouseExited(e -> {
+            column.setFill(Color.TRANSPARENT);});
+
+        int Column_no = i;
+        column.setOnMousePressed(e -> {
+            System.out.println("ooooo"+ this.PlayerColor);
+            System.out.println("00000 "+ Algorithm);
+            PlayerTurn(Column_no);
+            //after player is done
+            //PlayerTurn=false;
+            status.setText("It's Computer Turn");
+        });
+        column.setOnMouseReleased(e -> {
+            if(CompletedColumn) {
+                //Coputer's turn
+                //after it's done
+                status.setText("Your turn");
+                //PlayerTurn=true;
+            }});
+
+            GamePane.getChildren().add(column);
+        }
+
+
         return shape;
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         GamePane.getChildren().add(Board());
+
+    }
+    void setVariables(String  level,Object color,Object alg ){
+        this.PlayerColor=true;
+        levels = Integer.parseInt(level);
+
+        if (color.equals( "Red")) {
+            this.PlayerColor = true;
+        } //if color =true ,then player is red
+        else {
+            this.PlayerColor = false;
+        }
+        System.out.println("Color is "+this.PlayerColor);
+        if (alg.equals( "Minimax with alpha-beta pruning")) {
+            Algorithm = true;
+        } //algorithm is true if it is with pruning
+        else {
+            Algorithm = false;
+        }
+        System.out.println(Algorithm);
+    }
+    @FXML
+    protected void StartGame(ActionEvent event) throws IOException {
+        this.PlayerColor=true;
+        this.Algorithm=true;
+        //setting the values taken in initial page
+        if(!textfield_K.getText().isEmpty() && ColorsCombo.getValue()!=null && AlgorithmsCombo!=null) {
+            setVariables(textfield_K.getText(),ColorsCombo.getValue(),AlgorithmsCombo.getValue());
+            main_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            //main_stage=new Stage();
+            main_stage.setScene(new Scene
+                    (new FXMLLoader(Connect4_App.class.getResource("Connect4.fxml")).load(),1000,900));
+            main_stage.setMaximized(true);
+            main_stage.setResizable(false);
+            main_stage.show();
+            System.out.println("Color is "+this.PlayerColor);
+
+        }
+        else{ //display error
+            System.out.println("Complete empty fields");
+            alert_error("Complete missing fields first,please!");}
+
+
+
+
     }
 }
