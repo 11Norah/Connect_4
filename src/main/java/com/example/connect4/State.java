@@ -1,7 +1,4 @@
 package com.example.connect4;
-
-import java.util.ArrayList;
-
 public class State {
     /*
     board has 64 bits. We are concerned with 63 bits.
@@ -158,20 +155,13 @@ public class State {
         }
         return true;
     }
-
     public State[] generateChildStates() {
-        ArrayList<State> childStatesList = new ArrayList<>();
+        State[] childStates = new State[7];
         for(int i = 0; i < 7; i++) {
-            State nextState = generateChildState(i);
-            if(nextState == null) continue;
-            childStatesList.add(nextState);
+            childStates[i] = generateChildState(i);
         }
-        State[] childStates = new State[childStatesList.size()];
-        int count = 0;
-        for(State state : childStatesList) childStates[count++] = state;
         return childStates;
     }
-
     private State generateChildState(int column) {
         int colEmptySlot = getColEmptySlot(column);
         if(colEmptySlot > 5) return null;
