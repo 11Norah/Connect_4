@@ -1,5 +1,9 @@
 package com.example.connect4;
 
+import com.example.connect4.Solver.ISolver;
+import com.example.connect4.Solver.MinimaxWithPruningSolver;
+import com.example.connect4.heuristics.Heuristic;
+import com.example.connect4.heuristics.IHeuristic;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +29,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Connect4_Controller implements Initializable{
-
+     long initial_state=0;
+     State previous;
+    BitsArray bits=new BitsArray(initial_state);
     //for initial page
     @FXML
     private Button start;
@@ -102,15 +108,38 @@ public class Connect4_Controller implements Initializable{
     }
     void PlayerTurn(int column_NO,Boolean col){
         if(PlayerTurn){
-              System.out.println("color in turns"+col);
-                AddChip(column_NO, col);
 
+                System.out.println("color in turns"+col);
+                //display chips on board
+                AddChip(column_NO, col);
                 ChipsInColumn[column_NO]++;
+                //setting this state on back
+
 
         }else{alert_error("It's Computer Turn ,wait!");}
 
     }
-    private void ComputerTurn(){
+    int count=0;
+    private void ComputerTurn(int col){
+        count++;
+      if(count==1){
+        this.previous=new State(bits,false);}
+
+
+        System.out.println("previous State :"+this.previous.getBoard());
+        if(this.Algorithm){ //with_pruning
+            ISolver instance_solve=new MinimaxWithPruningSolver();
+            IHeuristic heu=new Heuristic();
+
+            instance_solve.solve(heu,this.levels,previous,col);
+            int comp_col=instance_solve.getChangedColumn();
+            System.out.println("column comp :"+comp_col);
+            AddChip(comp_col,!this.PlayerColor);
+            ChipsInColumn[instance_solve.getChangedColumn()]++;
+            this.previous=instance_solve.getChosenState();
+        }else{
+            //without
+        }
         //after it plays
         //display that it is player's turn
 
@@ -159,14 +188,17 @@ public class Connect4_Controller implements Initializable{
             System.out.println("00000 "+ this.levels);
             PlayerTurn(Column_no,col);
             //after player is done
-            //PlayerTurn=false;
+            PlayerTurn=false;
             status.setText("It's Computer Turn");
         });
         column.setOnMouseReleased(e -> {
-            if(CompletedColumn) {
+            if(!CompletedColumn) {
                 //Coputer's turn
                 //after it's done
+                System.out.println("NOW COMPUTER");
+                ComputerTurn(Column_no);
                 status.setText("Your turn");
+                PlayerTurn=true;
                 //PlayerTurn=true;
             }});
 

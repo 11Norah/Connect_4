@@ -21,7 +21,9 @@ public class State {
         this.board = board;
         this.turn = turn;
     }
-
+    public long getBoard() {
+        return board.getBits();
+    }
     public int getStateScore() {
         return getComputerScore() - getHumanScore();
     }
