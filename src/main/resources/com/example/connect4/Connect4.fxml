@@ -36,13 +36,13 @@
         <Label text="Player Score :" layoutY="200" layoutX="100"><font>
             <Font name="System Bold" size="20.0"  />
         </font></Label>
-        <Label fx:id="Player_score" layoutY="200" layoutX="100"><font>
+        <Label fx:id="Player_score" layoutY="200" layoutX="270"><font>
             <Font name="System Bold" size="20.0"  />
         </font></Label>
         <Label text="Computer Score :" layoutX="100" layoutY="230"><font>
             <Font name="System Bold" size="20.0"  />
         </font></Label>
-        <Label fx:id="Computer_score" layoutX="100" layoutY="230"><font>
+        <Label fx:id="Computer_score" layoutX="270" layoutY="230"><font>
             <Font name="System Bold" size="20.0"  />
         </font></Label>
 
