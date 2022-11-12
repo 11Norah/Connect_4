@@ -1,5 +1,6 @@
 package com.example.connect4;
 
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,12 +18,14 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Connect4_Controller implements Initializable{
+
     //for initial page
     @FXML
     private Button start;
@@ -47,10 +50,15 @@ public class Connect4_Controller implements Initializable{
     @FXML
     private Label status;
 
-    int levels;
-    Boolean PlayerColor;
-    Boolean Algorithm;
+    private int levels;
+    private Boolean PlayerColor=true;
+    private Boolean Algorithm;
 
+    public Connect4_Controller(int level,Boolean alg,Boolean Color){
+        this.PlayerColor=Color;
+        this.Algorithm=alg;
+        this.levels=level;
+    }
     @FXML
     protected void display() {
         AlgorithmsCombo.getItems().setAll("Minimax without alpha-beta pruning", "Minimax with alpha-beta pruning");
@@ -70,7 +78,6 @@ public class Connect4_Controller implements Initializable{
     //------------------------------------------------------------------------------------------
 
     public void Restart(){
-        System.out.println(PlayerColor +"  KK");
         GamePane.getChildren().clear();
         GamePane.getChildren().add(Board());
         //reset columns array to be empty
@@ -86,14 +93,17 @@ public class Connect4_Controller implements Initializable{
         new_chip.setCenterX(TileSize/2+3.5);
         new_chip.setCenterY(TileSize/2+3.5);
         new_chip.setTranslateX( Column_no*(TileSize+10)+TileSize/3);
-        new_chip.setTranslateY(((5-ChipsInColumn[Column_no]) * (TileSize + 10)) + TileSize / 3);
+       // new_chip.setTranslateY(((5-ChipsInColumn[Column_no]) * (TileSize + 10)) + TileSize / 3);
+        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5),new_chip );
+        animation.setToY(((5-ChipsInColumn[Column_no]) * (TileSize + 10)) + TileSize / 3);
+        animation.play();
         GamePane.getChildren().add(new_chip);
 
     }
-    void PlayerTurn(int column_NO){
+    void PlayerTurn(int column_NO,Boolean col){
         if(PlayerTurn){
-              System.out.println("color in turns"+this.PlayerColor);
-                AddChip(column_NO, this.PlayerColor);
+              System.out.println("color in turns"+col);
+                AddChip(column_NO, col);
 
                 ChipsInColumn[column_NO]++;
 
@@ -143,10 +153,11 @@ public class Connect4_Controller implements Initializable{
             column.setFill(Color.TRANSPARENT);});
 
         int Column_no = i;
+        Boolean col=this.PlayerColor;
         column.setOnMousePressed(e -> {
             System.out.println("ooooo"+ this.PlayerColor);
-            System.out.println("00000 "+ Algorithm);
-            PlayerTurn(Column_no);
+            System.out.println("00000 "+ this.levels);
+            PlayerTurn(Column_no,col);
             //after player is done
             //PlayerTurn=false;
             status.setText("It's Computer Turn");
@@ -169,39 +180,57 @@ public class Connect4_Controller implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        GamePane.getChildren().add(Board());
+
+        System.out.println("Ini c "+this.PlayerColor);
+        System.out.println("Ini l " +this.levels);
+        System.out.println("Ini k"+this.Algorithm);
+        GamePane.getChildren().addAll(Board());
+
 
     }
-    void setVariables(String  level,Object color,Object alg ){
-        this.PlayerColor=true;
-        levels = Integer.parseInt(level);
+    void setVariables(){
+        levels = Integer.parseInt(textfield_K.getText());
 
-        if (color.equals( "Red")) {
+        if (ColorsCombo.getValue().equals( "Red")) {
             this.PlayerColor = true;
         } //if color =true ,then player is red
         else {
             this.PlayerColor = false;
         }
-        System.out.println("Color is "+this.PlayerColor);
-        if (alg.equals( "Minimax with alpha-beta pruning")) {
+
+
+        if (AlgorithmsCombo.getValue().equals( "Minimax with alpha-beta pruning")) {
             Algorithm = true;
         } //algorithm is true if it is with pruning
         else {
             Algorithm = false;
         }
-        System.out.println(Algorithm);
+        System.out.println("Color is "+this.PlayerColor +this.Algorithm +this.levels);
+
+
     }
     @FXML
     protected void StartGame(ActionEvent event) throws IOException {
-        this.PlayerColor=true;
-        this.Algorithm=true;
+
         //setting the values taken in initial page
         if(!textfield_K.getText().isEmpty() && ColorsCombo.getValue()!=null && AlgorithmsCombo!=null) {
-            setVariables(textfield_K.getText(),ColorsCombo.getValue(),AlgorithmsCombo.getValue());
+            setVariables();
             main_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            //main_stage=new Stage();
-            main_stage.setScene(new Scene
-                    (new FXMLLoader(Connect4_App.class.getResource("Connect4.fxml")).load(),1000,900));
+            FXMLLoader fxmlLoader = new FXMLLoader(Connect4_App.class.getResource("Connect4.fxml"));
+            System.out.println("Color in start  "+this.PlayerColor +this.Algorithm +this.levels);
+
+            fxmlLoader.setControllerFactory(type -> {
+                        if (type == Connect4_Controller.class) {
+                            return new Connect4_Controller(this.levels,this.Algorithm,this.PlayerColor);
+                        }
+                        try {
+                               return type.getConstructor().newInstance();
+                } catch (Exception exc) {
+                    // fatal...
+                    throw new RuntimeException(exc);
+                }
+            });
+            main_stage.setScene(new Scene(fxmlLoader.load(),1000,900));
             main_stage.setMaximized(true);
             main_stage.setResizable(false);
             main_stage.show();
