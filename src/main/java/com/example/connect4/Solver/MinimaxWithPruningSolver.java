@@ -9,22 +9,28 @@ import java.util.HashMap;
 
 public class MinimaxWithPruningSolver implements ISolver {
 
-    private final IHeuristic heuristic;
+    private  IHeuristic heuristic;
     private int bestChoice;
     private int changedColumn;
 
     private State chosenState;
-    private final MinimaxTree minimaxTree;
-    private final int maxLevel;
-    private final HashMap<Node, Integer> finalPath;
-    private final Node[] pathToGoal;
+    private  MinimaxTree minimaxTree;
+    private  int maxLevel;
+    private  HashMap<Node, Integer> finalPath;
+    private  Node[] pathToGoal;
 
-    public MinimaxWithPruningSolver(IHeuristic heuristic, int maxLevel, State prevState, int col) {
+
+    public void solve(IHeuristic heuristic, int maxLevel, State prevState, int col) {
         this.maxLevel = maxLevel;
         this.minimaxTree = new MinimaxTree(new Node(null, getNewState(prevState, col)));
         this.heuristic = heuristic;
         this.finalPath = new HashMap<>();
         this.pathToGoal = new Node[maxLevel + 1];
+        bestChoice = maxValue(minimaxTree.getRoot(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+        minimaxTree.getRoot().setHeuristics(bestChoice);
+        generatePathToGoal();
+        generateChosenState();
+        generateChangedColumn();
     }
 
     public State getNewState(State prevState, int col) {
@@ -83,13 +89,6 @@ public class MinimaxWithPruningSolver implements ISolver {
     }
 
 
-    public void solve() {
-        bestChoice = maxValue(minimaxTree.getRoot(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
-        minimaxTree.getRoot().setHeuristics(bestChoice);
-        generatePathToGoal();
-        generateChosenState();
-        generateChangedColumn();
-    }
 
     @Override
     public MinimaxTree getTree() {
