@@ -25,7 +25,7 @@
                     url="https://i0.wp.com/baytekentlive.wpengine.com/wp-content/uploads/2017/06/connect4logo.png"/>
         </image></ImageView>
 
-        <Button fx:id="restart"  layoutX="1200.0" layoutY="3.0" mnemonicParsing="false"   >
+        <Button fx:id="restart"  layoutX="1250.0" layoutY="3.0" mnemonicParsing="false" onAction="#Restart"  >
             <graphic>
                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="100.0" fitWidth="100.0" style="-fx-border-radius:50; -fx-background-radius:50;">
                     <Image url="https://st2.depositphotos.com/1853861/7028/v/950/depositphotos_70280439-stock-illustration-reset-button-icon.jpg"/>
@@ -45,6 +45,15 @@
         <Label fx:id="Computer_score" layoutX="100" layoutY="230"><font>
             <Font name="System Bold" size="20.0"  />
         </font></Label>
+
+        <Label fx:id="status" layoutY="290" layoutX="120"  text="Let's start!" style="-fx-background-color: white; -fx-text-fill:Blue; ">
+            <font>
+                <Font name="Forte" size="30.0"  />
+            </font>
+            <effect>
+
+            </effect>
+        </Label>
     </children>
 
 </AnchorPane>

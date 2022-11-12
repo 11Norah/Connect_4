@@ -9,43 +9,47 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.Pane?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            style=" -fx-background-image: url('https://t4.ftcdn.net/jpg/04/16/89/05/360_F_416890539_0nNiMflDOVAA1oSgMmjZTx1tMiM7VCVL.jpg');
-                     -fx-background-size: 800 600;"
+            style=" -fx-background-image: url('https://www.gamesver.com/wp-content/uploads/2020/02/Puzzle-game-Connect-4-with-red-and-yellow-discs.jpg');
+            -fx-background-size: 800 600; -fx-background-color:rgb(0,0,0);"
             fx:controller="com.example.connect4.Connect4_Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <!--GUI Heading-->
-    <Label layoutX="460.0" layoutY="90.0" prefHeight="78.0" prefWidth="4000.0" text="Connect 4" textAlignment="CENTER" textFill="deepskyblue" >
-        <font>
-            <Font name="Times New Roman Bold" size="50.0"  />
-        </font>
-    </Label>
 
+    <Label  layoutX="360.0" layoutY="50.0" style="-fx-background-color:rgba(0,0,0,0.75); " prefWidth="430" prefHeight="500"/>
+    <ImageView layoutX="350.0" layoutY="30.0"  ><image>
+        <Image
+                url="https://i0.wp.com/baytekentlive.wpengine.com/wp-content/uploads/2017/06/connect4logo.png"/>
+    </image></ImageView>
     <!--Taking initial state,then algorithm-->
-    <Label text="K :" layoutX="450.0" layoutY="200.0" textFill="antiquewhite"><font>
+    <Label text="Enter Level :" layoutX="400.0" layoutY="200.0" textFill="wheat"  ><font>
         <Font name="System Bold" size="20.0"  />
     </font></Label>
 
     <TextField fx:id="textfield_K" layoutX="560.0" layoutY="200.0" prefHeight="35.0" prefWidth="200.0" />
-    <Label text="Algorithm :" layoutX="450.0" layoutY="300.0" textFill="antiquewhite"><font>
+    <Label text="Algorithm :" layoutX="400.0" layoutY="300.0" textFill="wheat"><font>
         <Font name="System Bold" size="20.0"  />
     </font></Label>
     <ComboBox onMouseClicked="#display" fx:id="AlgorithmsCombo" layoutX="560.0" layoutY="300.0" prefHeight="35.0" prefWidth="210.0" promptText="choose"/>
-    <Label text="Color :" layoutX="450.0" layoutY="400.0" textFill="antiquewhite"><font>
+    <Label text="Player's Color :" layoutX="400.0" layoutY="400.0" textFill="wheat"  ><font>
         <Font name="System Bold" size="20.0"  />
     </font></Label>
     <ComboBox onMouseClicked="#displayCo" fx:id="ColorsCombo" layoutX="560.0" layoutY="400.0" prefHeight="35.0" prefWidth="210.0" promptText="choose"/>
 
     <!--start-->
-    <Button fx:id="start"  layoutY="500.0" layoutX="530.0" onAction="#StartGame" prefHeight="45.0" prefWidth="80.0" style="-fx-background-color: #66B2FF;" text="Start">
+    <Button  fx:id="start"  layoutY="500.0" layoutX="530.0" textFill="black" onAction="#StartGame" prefHeight="45.0" prefWidth="80.0" style="-fx-background-color: #65B2FF;" text="Start">
         <font>
             <Font  name="System  Bold" size="20.0" />
-        </font></Button>
+        </font>
+    </Button>
+
 </AnchorPane>
 
 
 
-        <!-- style=" -fx-background-image: url('https://img.genial.ly/56f02bbc1561e80fe0933d02/e739988d-16f2-4f93-88bf-6999f7dcd095.png');
-                     -fx-background-size: 800 600;" -->
