@@ -4,6 +4,7 @@ import com.example.connect4.State;
 import com.example.connect4.heuristics.IHeuristic;
 import com.example.connect4.minimaxTree.MinimaxTree;
 import com.example.connect4.minimaxTree.Node;
+
 import java.util.HashMap;
 
 public class MinimaxWithPruningSolver implements ISolver {
@@ -18,12 +19,16 @@ public class MinimaxWithPruningSolver implements ISolver {
     private final HashMap<Node, Integer> finalPath;
     private final Node[] pathToGoal;
 
-    public MinimaxWithPruningSolver(IHeuristic heuristic, int maxLevel, State initialState) {
+    public MinimaxWithPruningSolver(IHeuristic heuristic, int maxLevel, State prevState, int col) {
         this.maxLevel = maxLevel;
-        this.minimaxTree = new MinimaxTree(new Node(null, initialState));
+        this.minimaxTree = new MinimaxTree(new Node(null, getNewState(prevState, col)));
         this.heuristic = heuristic;
         this.finalPath = new HashMap<>();
         this.pathToGoal = new Node[maxLevel + 1];
+    }
+
+    public State getNewState(State prevState, int col) {
+        return prevState.generateChildStates()[col];
     }
 
     public int minValue(Node parentNode, int alpha, int beta, int currLevel) {
