@@ -55,6 +55,10 @@ public class Connect4_Controller implements Initializable{
     private Pane GamePane=new Pane();
     @FXML
     private Label status;
+    @FXML
+    private Label Player_score;
+    @FXML
+    private Label Computer_score;
 
     private int levels;
     private Boolean PlayerColor=true;
@@ -86,6 +90,7 @@ public class Connect4_Controller implements Initializable{
     public void Restart(){
         GamePane.getChildren().clear();
         GamePane.getChildren().add(Board());
+        this.PlayerTurn=true;
         //reset columns array to be empty
         for(int i=0;i<Columns;i++){
         ChipsInColumn[i]=0;
@@ -137,11 +142,16 @@ public class Connect4_Controller implements Initializable{
             AddChip(comp_col,!this.PlayerColor);
             ChipsInColumn[instance_solve.getChangedColumn()]++;
             this.previous=instance_solve.getChosenState();
+
         }else{
             //without
         }
         //after it plays
         //display that it is player's turn
+        Computer_score.setText(String.valueOf(this.previous.getComputerScore()));
+        Player_score.setText(String.valueOf(this.previous.getHumanScore()));
+        status.setText("Your turn");
+        PlayerTurn=true;
 
     }
     Shape Board() {
@@ -195,9 +205,13 @@ public class Connect4_Controller implements Initializable{
             if(!CompletedColumn) {
                 //Coputer's turn
                 //after it's done
-                System.out.println("NOW COMPUTER");
+                System.out.println("NOW COMPUTER" +Column_no);
+                Duration.seconds(5000000);
+
+                //user is done ,computer turn
                 ComputerTurn(Column_no);
-                status.setText("Your turn");
+
+
                 PlayerTurn=true;
                 //PlayerTurn=true;
             }});

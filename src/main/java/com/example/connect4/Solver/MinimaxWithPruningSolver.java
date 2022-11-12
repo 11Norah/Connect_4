@@ -97,7 +97,7 @@ public class MinimaxWithPruningSolver implements ISolver {
 
     @Override
     public int getChangedColumn() {
-        return 0;
+        return this.changedColumn;
     }
 
     @Override
