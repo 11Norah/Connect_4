@@ -27,11 +27,14 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 public class Connect4_Controller implements Initializable{
      long initial_state=0;
      State previous;
     BitsArray bits=new BitsArray(initial_state);
+
     //for initial page
     @FXML
     private Button start;
@@ -91,12 +94,19 @@ public class Connect4_Controller implements Initializable{
         GamePane.getChildren().clear();
         GamePane.getChildren().add(Board());
         this.PlayerTurn=true;
+        this.count=0;
+        status.setText("Player's  turn");
+        Player_score.setText("");
+        Computer_score.setText("");
         //reset columns array to be empty
         for(int i=0;i<Columns;i++){
         ChipsInColumn[i]=0;
         }
+
+
     }
-    public void AddChip(int Column_no, Boolean red){
+    public void AddChip(int Column_no, Boolean red,char turn){
+        TranslateTransition animation;
         Circle new_chip=new Circle(TileSize/2);
         if(red){
         new_chip.setFill(Color.RED);}
@@ -105,7 +115,12 @@ public class Connect4_Controller implements Initializable{
         new_chip.setCenterY(TileSize/2+3.5);
         new_chip.setTranslateX( Column_no*(TileSize+10)+TileSize/3);
        // new_chip.setTranslateY(((5-ChipsInColumn[Column_no]) * (TileSize + 10)) + TileSize / 3);
-        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5),new_chip );
+        if (turn=='h') {
+            animation = new TranslateTransition(Duration.seconds(0.05), new_chip);
+        }else{
+            animation = new TranslateTransition(Duration.seconds(0.4), new_chip);
+            animation.pause();
+        }
         animation.setToY(((5-ChipsInColumn[Column_no]) * (TileSize + 10)) + TileSize / 3);
         animation.play();
         GamePane.getChildren().add(new_chip);
@@ -116,7 +131,7 @@ public class Connect4_Controller implements Initializable{
 
                 System.out.println("color in turns"+col);
                 //display chips on board
-                AddChip(column_NO, col);
+                AddChip(column_NO, col,'h');
                 ChipsInColumn[column_NO]++;
                 //setting this state on back
 
@@ -139,7 +154,7 @@ public class Connect4_Controller implements Initializable{
             instance_solve.solve(heu,this.levels,previous,col);
             int comp_col=instance_solve.getChangedColumn();
             System.out.println("column comp :"+comp_col);
-            AddChip(comp_col,!this.PlayerColor);
+            AddChip(comp_col,!this.PlayerColor,'c');
             ChipsInColumn[instance_solve.getChangedColumn()]++;
             this.previous=instance_solve.getChosenState();
 
@@ -200,21 +215,24 @@ public class Connect4_Controller implements Initializable{
             //after player is done
             PlayerTurn=false;
             status.setText("It's Computer Turn");
+
         });
+
         column.setOnMouseReleased(e -> {
-            if(!CompletedColumn) {
-                //Coputer's turn
-                //after it's done
-                System.out.println("NOW COMPUTER" +Column_no);
-                Duration.seconds(5000000);
 
-                //user is done ,computer turn
-                ComputerTurn(Column_no);
+                    //Coputer's turn
+                    //after it's done
+                    System.out.println("NOW COMPUTER" + Column_no);
+                    PlayerTurn = true;
+                    //PlayerTurn=true;
+            ComputerTurn(Column_no);
+
+            //e.wait(5000);
+                    //user is done ,computer turn
 
 
-                PlayerTurn=true;
-                //PlayerTurn=true;
-            }});
+
+           });
 
             GamePane.getChildren().add(column);
         }
