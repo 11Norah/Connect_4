@@ -2,6 +2,7 @@ package com.example.connect4;
 
 import com.example.connect4.Solver.ISolver;
 import com.example.connect4.Solver.MinimaxWithPruningSolver;
+import com.example.connect4.Solver.MinimaxWithoutPruningSolver;
 import com.example.connect4.heuristics.Heuristic;
 import com.example.connect4.heuristics.IHeuristic;
 import javafx.animation.TranslateTransition;
@@ -160,6 +161,15 @@ public class Connect4_Controller implements Initializable{
 
         }else{
             //without
+            ISolver instance_solve=new MinimaxWithoutPruningSolver();
+            IHeuristic heu=new Heuristic();
+
+            instance_solve.solve(heu,this.levels,previous,col);
+            int comp_col=instance_solve.getChangedColumn();
+            System.out.println("column comp :"+comp_col);
+            AddChip(comp_col,!this.PlayerColor,'c');
+            ChipsInColumn[instance_solve.getChangedColumn()]++;
+            this.previous=instance_solve.getChosenState();
         }
         //after it plays
         //display that it is player's turn
