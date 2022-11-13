@@ -54,6 +54,8 @@ public class Connect4_Controller implements Initializable{
     private ComboBox ColorsCombo;
     @FXML
     private TextField textfield_K;
+    @FXML
+    private Button view;
     //for game page
     private static final int TileSize = 80;
     private static final int Columns = 7;
@@ -157,6 +159,7 @@ public class Connect4_Controller implements Initializable{
 
 
         System.out.println("previous State :"+this.previous.getBoard());
+
         if(this.Algorithm){ //with_pruning
              instance_solve=new MinimaxWithPruningSolver();
             IHeuristic heu=new Heuristic();
@@ -189,6 +192,7 @@ public class Connect4_Controller implements Initializable{
         Player_score.setText(String.valueOf(this.previous.getHumanScore()));
         status.setText("Your turn");
         PlayerTurn=true;
+        view.setDisable(false);
 
     }
     Shape Board() {
@@ -363,7 +367,6 @@ public class Connect4_Controller implements Initializable{
             l1.setStroke(Color.BLACK);
              }
             else if(instance_solve.getPathToGoal()[0].getHeuristics()==instance_solve.getTree().getRoot().getChildren().get(i).getHeuristics()){
-                System.out.println("hooooooooooooo");
                 l1.setStroke(Color.GREEN);
                 l1.setStrokeWidth(5);
                 flag1=1;
@@ -383,7 +386,6 @@ public class Connect4_Controller implements Initializable{
             secondaryLayout.getChildren().add(t2);
             secondaryLayout.getChildren().add(l1);
             size2=instance_solve.getTree().getRoot().getChildren().get(i).getChildren().size();
-            System.out.println("b5"+size2);
             for(int j=0;j<size2;j++){
                 Circle c3=new Circle();
                 Line l2=new Line(1300+2700*i,320,240+355*j+365*(size1+.2)*i,580);
@@ -443,8 +445,6 @@ public class Connect4_Controller implements Initializable{
         newWindow.setTitle("Second Stage");
 
         newWindow.setScene(secondScene);
-
-        // Set position of second window, related to primary window.
         newWindow.show();
     }
 }

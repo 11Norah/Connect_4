@@ -56,7 +56,7 @@
         </Label>
     </children>
     <!--viewTree-->
-    <Button fx:id="view" disable="false" layoutY="400.0" layoutX="150.0" mnemonicParsing="false" onAction="#viewTree" style="-fx-background-color: #66B2FF;" text="view Tree">
+    <Button fx:id="view" disable="true" layoutY="400.0" layoutX="150.0" mnemonicParsing="false" onAction="#viewTree" style="-fx-background-color: #66B2FF;" text="view Tree">
         <font>
             <Font size="14.0" />
         </font></Button>
