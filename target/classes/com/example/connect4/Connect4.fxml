@@ -46,14 +46,19 @@
             <Font name="System Bold" size="20.0"  />
         </font></Label>
 
-        <Label fx:id="status" layoutY="290" layoutX="120"   text="Let's start!" style="-fx-background-color: plum; -fx-text-fill:Blue; ">
+        <Label fx:id="status" layoutY="290" layoutX="120"  text="Let's start!" style="-fx-background-color: white; -fx-text-fill:Blue; ">
             <font>
-                <Font name="Forte" size="40.0"  />
+                <Font name="Forte" size="30.0"  />
             </font>
             <effect>
 
             </effect>
         </Label>
     </children>
+    <!--viewTree-->
+    <Button fx:id="view" disable="false" layoutY="400.0" layoutX="150.0" mnemonicParsing="false" onAction="#viewTree" style="-fx-background-color: #66B2FF;" text="view Tree">
+        <font>
+            <Font size="14.0" />
+        </font></Button>
 
 </AnchorPane>

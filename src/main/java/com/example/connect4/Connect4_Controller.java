@@ -1,5 +1,6 @@
 package com.example.connect4;
-
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import com.example.connect4.Solver.ISolver;
 import com.example.connect4.Solver.MinimaxWithPruningSolver;
 import com.example.connect4.Solver.MinimaxWithoutPruningSolver;
@@ -11,17 +12,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PageLayout;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -35,6 +43,7 @@ public class Connect4_Controller implements Initializable{
      long initial_state=0;
      State previous;
     BitsArray bits=new BitsArray(initial_state);
+    ISolver instance_solve;
 
     //for initial page
     @FXML
@@ -149,11 +158,12 @@ public class Connect4_Controller implements Initializable{
 
         System.out.println("previous State :"+this.previous.getBoard());
         if(this.Algorithm){ //with_pruning
-            ISolver instance_solve=new MinimaxWithPruningSolver();
+             instance_solve=new MinimaxWithPruningSolver();
             IHeuristic heu=new Heuristic();
 
             instance_solve.solve(heu,this.levels,previous,col);
             int comp_col=instance_solve.getChangedColumn();
+            System.out.println(instance_solve.getTree().getRoot().getChildren());
             System.out.println("column comp :"+comp_col);
             AddChip(comp_col,!this.PlayerColor,'c');
             ChipsInColumn[instance_solve.getChangedColumn()]++;
@@ -161,10 +171,12 @@ public class Connect4_Controller implements Initializable{
 
         }else{
             //without
-            ISolver instance_solve=new MinimaxWithoutPruningSolver();
+             instance_solve=new MinimaxWithoutPruningSolver();
             IHeuristic heu=new Heuristic();
 
+
             instance_solve.solve(heu,this.levels,previous,col);
+
             int comp_col=instance_solve.getChangedColumn();
             System.out.println("column comp :"+comp_col);
             AddChip(comp_col,!this.PlayerColor,'c');
@@ -314,9 +326,125 @@ public class Connect4_Controller implements Initializable{
         else{ //display error
             System.out.println("Complete empty fields");
             alert_error("Complete missing fields first,please!");}
+    }
+    @FXML
+    protected  void viewTree() {
+        AnchorPane secondaryLayout = new AnchorPane();
+        String computercolor;
 
+        secondaryLayout.setPrefSize(50000,800);
+        ScrollPane sp=new ScrollPane();
+        Group root=new Group();
+        root.getChildren().addAll(sp);
+        sp.setPrefSize(5000, 800);
+        sp.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        Scene secondScene = new Scene(root, 1000, 600);
+        Circle c1=new Circle();
+        c1.setCenterX(9400.0f);
+        c1.setCenterY(90.0f);
+        c1.setRadius(20.0f);
+        if(PlayerColor==true){
+            c1.setFill(Color.YELLOW);
+        }
+        else{
+            c1.setFill(Color.RED);
+        }
+        Text t1 = new Text(c1.getCenterX()-12, c1.getCenterY(),Integer.toString(instance_solve.getTree().getRoot().getHeuristics()));
+        secondaryLayout.getChildren().add(c1);
+        secondaryLayout.getChildren().add(t1);
+        int size1=instance_solve.getTree().getRoot().getChildren().size();
+        int size2,size3;
+        int flag1=0,flag2=0,flag3=0;
+        for (int i=0;i<size1;i++){
+            Circle c2=new Circle();
+            Line l1=new Line(9400,110,1300+2700*i,280);
 
+          if(flag1==1){
+            l1.setStroke(Color.BLACK);
+             }
+            else if(instance_solve.getPathToGoal()[0].getHeuristics()==instance_solve.getTree().getRoot().getChildren().get(i).getHeuristics()){
+                System.out.println("hooooooooooooo");
+                l1.setStroke(Color.GREEN);
+                l1.setStrokeWidth(5);
+                flag1=1;
+            }
+            c2.setCenterX(1300.0f+2700*i);
+            c2.setCenterY(300.0f);
+            c2.setRadius(20.0f);
+            if(PlayerColor==true){
+                c2.setFill(Color.RED);
+            }
+            else{
+                c2.setFill(Color.YELLOW);
+            }
 
+            Text t2 = new Text(c2.getCenterX()-12, c2.getCenterY(),Integer.toString(instance_solve.getTree().getRoot().getChildren().get(i).getHeuristics()));
+            secondaryLayout.getChildren().add(c2);
+            secondaryLayout.getChildren().add(t2);
+            secondaryLayout.getChildren().add(l1);
+            size2=instance_solve.getTree().getRoot().getChildren().get(i).getChildren().size();
+            System.out.println("b5"+size2);
+            for(int j=0;j<size2;j++){
+                Circle c3=new Circle();
+                Line l2=new Line(1300+2700*i,320,240+355*j+365*(size1+.2)*i,580);
+                if(flag2==1){
+                    l2.setStroke(Color.BLACK);
+                }
+              else if(instance_solve.getPathToGoal()[1].getHeuristics()==(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getHeuristics())){
+                    l2.setStroke(Color.GREEN);
+                    l2.setStrokeWidth(5);
+                    flag2=1;
+                }
+                c3.setCenterX(240.0f+355*j+365*(size1+.2)*i);
+                c3.setCenterY(600.0f);
+                c3.setRadius(20.0f);
+                if(PlayerColor==true){
+                    c3.setFill(Color.YELLOW);
+                }
+                else{
+                    c3.setFill(Color.RED);
+                }
+                secondaryLayout.getChildren().add(c3);
+                secondaryLayout.getChildren().add(l2);
 
+                Text t3 = new Text(c3.getCenterX()-12, c3.getCenterY(),Integer.toString(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getHeuristics()));
+                secondaryLayout.getChildren().add(t3);
+                size3=instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().size();
+                for(int k=0;k<size3;k++){
+                    Circle c4=new Circle();
+                    Line l3=new Line(240+355*j+365*(size3+.2)*i,620,40+50*k+45*(size2+1.2)*j+45*(size1+.2)*(size3+1.2)*i,880);
+                    if(flag3==1){
+                        l3.setStroke(Color.BLACK);
+                    }
+                   else if(instance_solve.getPathToGoal()[2].getHeuristics()==(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().get(k).getHeuristics())){
+                        l3.setStroke(Color.GREEN);
+                        l3.setStrokeWidth(5);
+                        flag3=1;
+                    }
+                    c4.setCenterX(40+50*k+45*(size2+1.2)*j+45*(size1+.2)*(size3+1.2)*i);
+                    c4.setCenterY(900.0f);
+                    c4.setRadius(20.0f);
+                    if(PlayerColor==true){
+                        c4.setFill(Color.RED);
+                    }
+                    else{
+                        c4.setFill(Color.YELLOW);
+                    }
+                    Text t4 = new Text(c4.getCenterX()-12, c4.getCenterY(),Integer.toString(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().get(k).getHeuristics()));
+                    secondaryLayout.getChildren().add(c4);
+                    secondaryLayout.getChildren().add(l3);
+                    secondaryLayout.getChildren().add(t4);
+                }
+            }
+        }
+        sp.setContent(secondaryLayout);
+
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Second Stage");
+
+        newWindow.setScene(secondScene);
+
+        // Set position of second window, related to primary window.
+        newWindow.show();
     }
 }
