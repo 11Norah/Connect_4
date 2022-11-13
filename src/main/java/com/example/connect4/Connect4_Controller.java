@@ -336,11 +336,11 @@ public class Connect4_Controller implements Initializable{
         AnchorPane secondaryLayout = new AnchorPane();
         String computercolor;
 
-        secondaryLayout.setPrefSize(50000,800);
+        secondaryLayout.setPrefSize(50000,500);
         ScrollPane sp=new ScrollPane();
         Group root=new Group();
         root.getChildren().addAll(sp);
-        sp.setPrefSize(5000, 800);
+        sp.setPrefSize(5000, 500);
         sp.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
         Scene secondScene = new Scene(root, 1000, 600);
         Circle c1=new Circle();
