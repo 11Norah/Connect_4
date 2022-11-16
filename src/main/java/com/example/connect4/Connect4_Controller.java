@@ -155,7 +155,7 @@ public class Connect4_Controller implements Initializable{
     private void ComputerTurn(int col){
         count++;
       if(count==1){
-        this.previous=new State(bits,false);}
+        this.previous=new State(bits,true);}
 
 
         System.out.println("previous State :"+this.previous.getBoard());
