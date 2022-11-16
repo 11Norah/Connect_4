@@ -251,14 +251,7 @@ public class Connect4_Controller implements Initializable{
                     System.out.println("NOW COMPUTER" + Column_no);
                     PlayerTurn = true;
                     //PlayerTurn=true;
-            ComputerTurn(Column_no);
-
-            //e.wait(5000);
-                    //user is done ,computer turn
-
-
-
-           });
+            ComputerTurn(Column_no);});
 
             GamePane.getChildren().add(column);
         }
@@ -334,15 +327,14 @@ public class Connect4_Controller implements Initializable{
     @FXML
     protected  void viewTree() {
         AnchorPane secondaryLayout = new AnchorPane();
-        String computercolor;
 
-        secondaryLayout.setPrefSize(50000,500);
+        //secondaryLayout.setPrefSize(500,300);
         ScrollPane sp=new ScrollPane();
         Group root=new Group();
         root.getChildren().addAll(sp);
-        sp.setPrefSize(5000, 500);
+        sp.setPrefSize(1335 , 700);
         sp.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        Scene secondScene = new Scene(root, 1000, 600);
+        Scene secondScene = new Scene(root, 600, 600);
         Circle c1=new Circle();
         c1.setCenterX(9400.0f);
         c1.setCenterY(90.0f);
@@ -439,11 +431,13 @@ public class Connect4_Controller implements Initializable{
                 }
             }
         }
+
         sp.setContent(secondaryLayout);
 
         Stage newWindow = new Stage();
         newWindow.setTitle("Second Stage");
-
+        newWindow.setMaximized(true);
+        //newWindow.setResizable(false);
         newWindow.setScene(secondScene);
         newWindow.show();
     }
