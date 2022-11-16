@@ -143,11 +143,11 @@ public class State {
         return score;
     }
 
-    private int getColEmptySlot(int column) {
+    public int getColEmptySlot(int column) {
         return board.getNthThreeBits(9 * column);
     }
 
-    private int getIthJthCoin(int row, int col) {
+    public int getIthJthCoin(int row, int col) {
         return board.getNthBit(9 * col + 3 + row);
     }
 
