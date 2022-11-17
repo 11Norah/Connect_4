@@ -39,6 +39,8 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.pow;
+
 public class Connect4_Controller implements Initializable{
      long initial_state=0;
      State previous;
@@ -74,6 +76,10 @@ public class Connect4_Controller implements Initializable{
     private Label Player_score;
     @FXML
     private Label Computer_score;
+    @FXML
+    private Label Time;
+    @FXML
+    private Label Nodes;
 
     private int levels;
     private Boolean PlayerColor=true;
@@ -114,6 +120,8 @@ public class Connect4_Controller implements Initializable{
         for(int i=0;i<Columns;i++){
         ChipsInColumn[i]=0;
         }
+        Nodes.setText("");
+        Time.setText("");
 
 
     }
@@ -154,6 +162,7 @@ public class Connect4_Controller implements Initializable{
     int count=0;
     private void ComputerTurn(int col){
         count++;
+         long startTime, endTime;
       if(count==1){
         this.previous=new State(bits,true);}
 
@@ -164,10 +173,13 @@ public class Connect4_Controller implements Initializable{
              instance_solve=new MinimaxWithPruningSolver();
             IHeuristic heu=new Heuristic();
 
+            startTime = System.nanoTime() / (long) pow(10, 3);
             instance_solve.solve(heu,this.levels,previous,col);
+            endTime = System.nanoTime() / (long) pow(10, 3);
+
             int comp_col=instance_solve.getChangedColumn();
-            System.out.println(instance_solve.getTree().getRoot().getChildren());
-            System.out.println("column comp :"+comp_col);
+           // System.out.println(instance_solve.getTree().getRoot().getChildren());
+            //System.out.println("column comp :"+comp_col);
             AddChip(comp_col,!this.PlayerColor,'c');
             ChipsInColumn[instance_solve.getChangedColumn()]++;
             this.previous=instance_solve.getChosenState();
@@ -176,12 +188,12 @@ public class Connect4_Controller implements Initializable{
             //without
              instance_solve=new MinimaxWithoutPruningSolver();
             IHeuristic heu=new Heuristic();
-
-
+            startTime = System.nanoTime() / (long) pow(10, 3);
             instance_solve.solve(heu,this.levels,previous,col);
-
+           endTime = System.nanoTime() / (long) pow(10, 3);
             int comp_col=instance_solve.getChangedColumn();
-            System.out.println("column comp :"+comp_col);
+
+            //System.out.println("column comp :"+comp_col);
             AddChip(comp_col,!this.PlayerColor,'c');
             ChipsInColumn[instance_solve.getChangedColumn()]++;
             this.previous=instance_solve.getChosenState();
@@ -190,9 +202,29 @@ public class Connect4_Controller implements Initializable{
         //display that it is player's turn
         Computer_score.setText(String.valueOf(this.previous.getComputerScore()));
         Player_score.setText(String.valueOf(this.previous.getHumanScore()));
+        System.out.println("Time Taken : "+ (endTime-startTime) +"micro seconds");
+        System.out.println("Nodes Expanded: "+ instance_solve.getTree().getExpandedNodes());
+        Time.setText("Time Taken : " +(endTime-startTime) +" MicroSeconds");
+        Nodes.setText("Nodes Expanded : "+ instance_solve.getTree().getExpandedNodes());
         status.setText("Your turn");
+
         PlayerTurn=true;
         view.setDisable(false);
+        //the end of the game
+        if(this.previous.isEndState()){
+            if(this.previous.getComputerScore()<this.previous.getHumanScore())
+            {Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Congratulations ");
+            alert.setHeaderText("You are the winner !"); alert.show(); Restart();}
+            else{Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Unfortunately ");
+                alert.setHeaderText("You lose the game !");
+                alert.setContentText("Hard luck ! Reset the game to play again");
+                alert.show();
+            }
+
+        }
+
 
     }
     Shape Board() {
@@ -245,7 +277,7 @@ public class Connect4_Controller implements Initializable{
         });
 
         column.setOnMouseReleased(e -> {
-
+          status.setText("It's  computer  turn");
                     //Coputer's turn
                     //after it's done
                     System.out.println("NOW COMPUTER" + Column_no);

@@ -14,7 +14,7 @@ public class MinimaxWithPruningSolver implements ISolver {
     private int changedColumn;
 
     private State chosenState;
-    private MinimaxTree minimaxTree;
+    public MinimaxTree minimaxTree;
     private int maxLevel;
     private HashMap<Node, Integer> finalPath;
     private Node[] pathToGoal;

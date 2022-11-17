@@ -50,10 +50,15 @@
             <font>
                 <Font name="Forte" size="30.0"  />
             </font>
-            <effect>
 
-            </effect>
         </Label>
+        <Label fx:id="Nodes" layoutX="570" layoutY="30"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+        <Label fx:id="Time" layoutX="570" layoutY="60"><font>
+            <Font name="System Bold" size="20.0"  />
+        </font></Label>
+
     </children>
     <!--viewTree-->
     <Button fx:id="view" disable="true" layoutY="400.0" layoutX="150.0" mnemonicParsing="false" onAction="#viewTree" style="-fx-background-color: #66B2FF;" text="view Tree">
