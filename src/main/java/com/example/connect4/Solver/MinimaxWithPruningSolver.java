@@ -9,20 +9,21 @@ import java.util.HashMap;
 
 public class MinimaxWithPruningSolver implements ISolver {
 
-    private  IHeuristic heuristic;
+    private IHeuristic heuristic;
     private int bestChoice;
     private int changedColumn;
 
     private State chosenState;
-    private  MinimaxTree minimaxTree;
-    private  int maxLevel;
-    private  HashMap<Node, Integer> finalPath;
-    private  Node[] pathToGoal;
+    private MinimaxTree minimaxTree;
+    private int maxLevel;
+    private HashMap<Node, Integer> finalPath;
+    private Node[] pathToGoal;
 
 
     public void solve(IHeuristic heuristic, int maxLevel, State prevState, int col) {
         this.maxLevel = maxLevel;
         this.minimaxTree = new MinimaxTree(new Node(null, getNewState(prevState, col)));
+
         this.heuristic = heuristic;
         this.finalPath = new HashMap<>();
         this.pathToGoal = new Node[maxLevel + 1];
@@ -45,7 +46,7 @@ public class MinimaxWithPruningSolver implements ISolver {
         for (int i = 0; i < states.length; i++) {
             State nextState = states[i];
             Node child = new Node(parentNode, nextState);
-            parentNode.addChild(child);
+            parentNode.addChild(child,minimaxTree);
             if (nextState != null) {
                 nextStatesValue = maxValue(child, alpha, beta, currLevel + 1);
                 child.setHeuristics(nextStatesValue);
@@ -60,11 +61,6 @@ public class MinimaxWithPruningSolver implements ISolver {
         return currStateValue;
     }
 
-    /*
-    Node temp = finalPath[currLevel + 1];
-    if(temp == null) finalPath[currLevel + 1] = child;
-    else if (temp.getHeuristics() < child.getHeuristics()) finalPath[currLevel + 1] = child;
-    */
     public int maxValue(Node parentNode, int alpha, int beta, int currLevel) {
         if (parentNode.getState().isEndState()) return parentNode.getState().getStateScore();
         if (currLevel == this.maxLevel) return heuristic.getHeuristic(parentNode.getState());
@@ -73,7 +69,7 @@ public class MinimaxWithPruningSolver implements ISolver {
         for (int i = 0; i < states.length; i++) {
             State nextState = states[i];
             Node child = new Node(parentNode, nextState);
-            parentNode.addChild(child);
+            parentNode.addChild(child,minimaxTree);
             if (nextState != null) {
                 nextStatesValue = minValue(child, alpha, beta, currLevel + 1);
                 child.setHeuristics(nextStatesValue);
@@ -87,7 +83,6 @@ public class MinimaxWithPruningSolver implements ISolver {
         }
         return currStateValue;
     }
-
 
 
     @Override

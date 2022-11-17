@@ -26,21 +26,10 @@ public class Node {
         Parent = parent;
     }
 
-    public void addChild(Node child) {
+    public void addChild(Node child, MinimaxTree tree) {
         child.setParent(this);
         this.Children.add(child);
-    }
-
-    public void setChildren(List<Node> children) {
-        Children = children;
-    }
-
-    public boolean isRoot() {
-        return (this.Parent == null);
-    }
-
-    public boolean isLeaf() {
-        return (this.Children.size() == 0);
+        tree.addNode();
     }
 
     public State getState() {
@@ -58,4 +47,5 @@ public class Node {
     public int getHeuristics() {
         return heuristics;
     }
+
 }
