@@ -4,6 +4,7 @@ public class MinimaxTree {
     private final Node root;
     private int expandedNodes;
 
+
     public MinimaxTree(Node root) {
         this.root = root;
         expandedNodes = 0;
