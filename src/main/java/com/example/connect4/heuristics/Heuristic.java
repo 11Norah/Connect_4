@@ -28,32 +28,6 @@ public class Heuristic implements IHeuristic{
         return expectedScore;
     }
 
-    private double getAllRightDiagonalsExpectedScore(int coin, State state) {
-        double expectedScore = 0;
-        int row = 0;
-        for(int col = 0; col < 4; col++) {
-            expectedScore += getRightDiagonalExpectedScore(coin, row, col, state);
-        }
-        int col = 0;
-        for(row = 1; row < 3; row++) {
-            expectedScore += getRightDiagonalExpectedScore(coin, row, col, state);
-        }
-        return expectedScore;
-    }
-
-    private double getAllLeftDiagonalsExpectedScore(int coin, State state) {
-        double expectedScore = 0;
-        int row = 0;
-        for(int col = 3; col < 7; col++) {
-            expectedScore += getLeftDiagonalExpectedScore(coin, row, col, state);
-        }
-        int col = 6;
-        for(row = 1; row < 3; row++) {
-            expectedScore += getLeftDiagonalExpectedScore(coin, row, col, state);
-        }
-        return expectedScore;
-    }
-
     private double getColExpectedScore(int coin, int col, State state) {
         int colEmptySlot = state.getColEmptySlot(col);
         int cell = colEmptySlot - 1;
@@ -101,66 +75,6 @@ public class Heuristic implements IHeuristic{
         if(rightAdj > 3) rightAdj = 3;
         if(numberOfEmptySlots == 0 || leftAdj + numberOfEmptySlots + rightAdj < 4) return 0;
         return (double) (Math.max(leftAdj, rightAdj) + 1) / 4;
-    }
-
-    private double getRightDiagonalExpectedScore(int coin, int row, int col, State state) {
-        double expectedScore = 0;
-        int leftAdj = 0, rightAdj = 0, numberOfEmptySlots = 0;
-        boolean emptyFlag = false;
-        while(row < 6 && col < 7) {
-            int emptySlotIndex = state.getColEmptySlot(col);
-            if(row < emptySlotIndex && state.getIthJthCoin(row, col) == coin) {
-                if(emptyFlag) rightAdj++;
-                else leftAdj++;
-            }
-            else if(row < emptySlotIndex) {
-                expectedScore += calculateSegScore(leftAdj, numberOfEmptySlots, rightAdj);
-                leftAdj = 0; rightAdj = 0; numberOfEmptySlots = 0; emptyFlag = false;
-            }
-            else {
-                if(rightAdj > 0) {
-                    expectedScore += calculateSegScore(leftAdj, numberOfEmptySlots, rightAdj);
-                    leftAdj = rightAdj;
-                    rightAdj = 0;
-                }
-                numberOfEmptySlots++;
-                emptyFlag = true;
-            }
-            row++;
-            col++;
-        }
-        expectedScore += calculateSegScore(leftAdj, numberOfEmptySlots, rightAdj);
-        return  expectedScore;
-    }
-
-    private double getLeftDiagonalExpectedScore(int coin, int row, int col, State state) {
-        double expectedScore = 0;
-        int leftAdj = 0, rightAdj = 0, numberOfEmptySlots = 0;
-        boolean emptyFlag = false;
-        while(row < 6 && col >= 0) {
-            int emptySlotIndex = state.getColEmptySlot(col);
-            if(row < emptySlotIndex && state.getIthJthCoin(row, col) == coin) {
-                if(emptyFlag) rightAdj++;
-                else leftAdj++;
-            }
-            else if(row < emptySlotIndex) {
-                expectedScore += calculateSegScore(leftAdj, numberOfEmptySlots, rightAdj);
-                leftAdj = 0; rightAdj = 0; numberOfEmptySlots = 0; emptyFlag = false;
-            }
-            else {
-                if(rightAdj > 0) {
-                    expectedScore += calculateSegScore(leftAdj, numberOfEmptySlots, rightAdj);
-                    leftAdj = rightAdj;
-                    rightAdj = 0;
-                }
-                numberOfEmptySlots++;
-                emptyFlag = true;
-            }
-            row++;
-            col--;
-        }
-        expectedScore += calculateSegScore(leftAdj, numberOfEmptySlots, rightAdj);
-        return  expectedScore;
     }
 
     @Override
