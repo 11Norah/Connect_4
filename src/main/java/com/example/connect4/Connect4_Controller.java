@@ -1,6 +1,4 @@
 package com.example.connect4;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import com.example.connect4.Solver.ISolver;
 import com.example.connect4.Solver.MinimaxWithPruningSolver;
 import com.example.connect4.Solver.MinimaxWithoutPruningSolver;
@@ -11,10 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.print.PageLayout;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.Light;
@@ -29,15 +25,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.pow;
 
@@ -197,6 +190,57 @@ public class Connect4_Controller implements Initializable{
             AddChip(comp_col,!this.PlayerColor,'c');
             ChipsInColumn[instance_solve.getChangedColumn()]++;
             this.previous=instance_solve.getChosenState();
+        }
+        System.out.println("                                "+instance_solve.getTree().getRoot().getHeuristics()+"                                ");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+            System.out.print("     " + instance_solve.getTree().getRoot().getChildren().get(i).getHeuristics() + "    ");
+
+        }
+        System.out.println();
+       for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+           System.out.print("     " + "/" + "    ");
+           System.out.print("      \\     ");
+           System.out.print("      \\     ");
+           System.out.print("      \\     ");
+           System.out.print("      \\     ");
+           System.out.print("      \\     ");
+       }
+       System.out.println();
+           for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+
+               System.out.print("    " + "/" + "   ");
+           }
+        System.out.println();
+
+        for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+
+            System.out.print("   " + "/" + "  ");
+        }
+        System.out.println();
+
+        for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+
+            System.out.print( " /"+"    ");
+        }
+        System.out.println();
+
+        for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+            for (int j = 0; j < instance_solve.getTree().getRoot().getChildren().get(i).getChildren().size(); j++) {
+                System.out.print(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getHeuristics() + "    ");
+            }
+        }
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        for(int i=0;i<instance_solve.getTree().getRoot().getChildren().size();i++) {
+            for (int j = 0; j < instance_solve.getTree().getRoot().getChildren().get(i).getChildren().size(); j++) {
+                for (int k=0;k<instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().size();k++){
+                    System.out.print(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().get(k).getHeuristics()+"    ");
+                }
+            }
         }
         //after it plays
         //display that it is player's turn
@@ -359,14 +403,15 @@ public class Connect4_Controller implements Initializable{
     @FXML
     protected  void viewTree() {
         AnchorPane secondaryLayout = new AnchorPane();
+        String computercolor;
 
-        //secondaryLayout.setPrefSize(500,300);
+        secondaryLayout.setPrefSize(50000,800);
         ScrollPane sp=new ScrollPane();
         Group root=new Group();
         root.getChildren().addAll(sp);
-        sp.setPrefSize(1335 , 700);
+        sp.setPrefSize(5000, 800);
         sp.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        Scene secondScene = new Scene(root, 600, 600);
+        Scene secondScene = new Scene(root, 1000, 600);
         Circle c1=new Circle();
         c1.setCenterX(9400.0f);
         c1.setCenterY(90.0f);
@@ -387,13 +432,8 @@ public class Connect4_Controller implements Initializable{
             Circle c2=new Circle();
             Line l1=new Line(9400,110,1300+2700*i,280);
 
-          if(flag1==1){
-            l1.setStroke(Color.BLACK);
-             }
-            else if(instance_solve.getPathToGoal()[0].getHeuristics()==instance_solve.getTree().getRoot().getChildren().get(i).getHeuristics()){
-                l1.setStroke(Color.GREEN);
-                l1.setStrokeWidth(5);
-                flag1=1;
+            if(flag1==1){
+                l1.setStroke(Color.BLACK);
             }
             c2.setCenterX(1300.0f+2700*i);
             c2.setCenterY(300.0f);
@@ -410,16 +450,12 @@ public class Connect4_Controller implements Initializable{
             secondaryLayout.getChildren().add(t2);
             secondaryLayout.getChildren().add(l1);
             size2=instance_solve.getTree().getRoot().getChildren().get(i).getChildren().size();
+            System.out.println("b5"+size2);
             for(int j=0;j<size2;j++){
                 Circle c3=new Circle();
                 Line l2=new Line(1300+2700*i,320,240+355*j+365*(size1+.2)*i,580);
                 if(flag2==1){
                     l2.setStroke(Color.BLACK);
-                }
-              else if(instance_solve.getPathToGoal()[1].getHeuristics()==(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getHeuristics())){
-                    l2.setStroke(Color.GREEN);
-                    l2.setStrokeWidth(5);
-                    flag2=1;
                 }
                 c3.setCenterX(240.0f+355*j+365*(size1+.2)*i);
                 c3.setCenterY(600.0f);
@@ -438,16 +474,26 @@ public class Connect4_Controller implements Initializable{
                 size3=instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().size();
                 for(int k=0;k<size3;k++){
                     Circle c4=new Circle();
-                    Line l3=new Line(240+355*j+365*(size3+.2)*i,620,40+50*k+45*(size2+1.2)*j+45*(size1+.2)*(size3+1.2)*i,880);
+                    Line l3=new Line(240+355*j+365*(size1+.2)*i,620,40+50*k+355*j+365*(size1+.2)*i,880);
                     if(flag3==1){
                         l3.setStroke(Color.BLACK);
                     }
-                   else if(instance_solve.getPathToGoal()[2].getHeuristics()==(instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().get(k).getHeuristics())){
+                    else if(instance_solve.getPathToGoal()[0].getHeuristics()==instance_solve.getTree().getRoot().getChildren().get(i).getHeuristics()&&
+                            instance_solve.getPathToGoal()[1].getHeuristics()==instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getHeuristics()&&
+                            instance_solve.getPathToGoal()[2].getHeuristics()==instance_solve.getTree().getRoot().getChildren().get(i).getChildren().get(j).getChildren().get(k).getHeuristics()){
+
                         l3.setStroke(Color.GREEN);
                         l3.setStrokeWidth(5);
                         flag3=1;
+                        l2.setStroke(Color.GREEN);
+                        l2.setStrokeWidth(5);
+                        flag2=1;
+                        l1.setStroke(Color.GREEN);
+                        l1.setStrokeWidth(5);
+                        flag1=1;
+
                     }
-                    c4.setCenterX(40+50*k+45*(size2+1.2)*j+45*(size1+.2)*(size3+1.2)*i);
+                    c4.setCenterX(40+50*k+355*j+365*(size1+.2)*i);
                     c4.setCenterY(900.0f);
                     c4.setRadius(20.0f);
                     if(PlayerColor==true){
@@ -463,14 +509,14 @@ public class Connect4_Controller implements Initializable{
                 }
             }
         }
-
         sp.setContent(secondaryLayout);
 
         Stage newWindow = new Stage();
         newWindow.setTitle("Second Stage");
-        newWindow.setMaximized(true);
-        //newWindow.setResizable(false);
+
         newWindow.setScene(secondScene);
+
+        // Set position of second window, related to primary window.
         newWindow.show();
     }
 }
